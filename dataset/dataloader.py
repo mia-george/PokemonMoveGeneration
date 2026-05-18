@@ -15,5 +15,9 @@ moves_df = moves_df.rename(columns={'short_descripton': 'short_description'})
 # clean short description column to remove $effect_chance%
 moves_df['short_description'] = moves_df['short_description'].str.replace('$effect_chance% ', '', regex=False)
 
+# fix empty values in power and accuracy columns
+moves_df["power"] = moves_df["power"].fillna("none")
+moves_df["accuracy"] = moves_df["accuracy"].fillna("none")
+
 print(moves_df.head(20))
 
