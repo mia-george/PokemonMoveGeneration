@@ -1,1 +1,3 @@
 pandas
+roman
+scikit-learn
