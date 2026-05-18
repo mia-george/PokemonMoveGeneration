@@ -1,6 +1,7 @@
 import pandas as pd
 import roman
 from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset, DataLoader
 
 moves_df = pd.read_csv("data/metadata_pokemon_moves.csv", encoding="utf-8")
 
