@@ -41,3 +41,46 @@ val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=42)
 
 print(f"Train: {len(train_df)}, Val: {len(val_df)}, Test: {len(test_df)}")
 
+class MovesDataset(Dataset):
+    def __init__(self, df, tokenizer, max_input_length=128, max_target_length=64):
+        self.inputs = df["input_text"].tolist()
+        self.targets = df["target_text"].tolist()
+        self.tokenizer = tokenizer
+        self.max_input_length = max_input_length
+        self.max_target_length = max_target_length
+
+    def __len__(self):
+        return len(self.inputs)
+
+    def __getitem__(self, idx):
+        input_enc = self.tokenizer(
+            self.inputs[idx],
+            max_length=self.max_input_length,
+            padding="max_length",
+            truncation=True,
+            return_tensors="pt"
+        )
+        target_enc = self.tokenizer(
+            self.targets[idx],
+            max_length=self.max_target_length,
+            padding="max_length",
+            truncation=True,
+            return_tensors="pt"
+        )
+        return {
+            "input_ids": input_enc["input_ids"].squeeze(),
+            "attention_mask": input_enc["attention_mask"].squeeze(),
+            "labels": target_enc["input_ids"].squeeze()
+        }
+
+def get_dataloaders(tokenizer, batch_size=8):
+    train_dataset = MovesDataset(train_df, tokenizer)
+    val_dataset = MovesDataset(val_df, tokenizer)
+    test_dataset = MovesDataset(test_df, tokenizer)
+
+    return (
+        DataLoader(train_dataset, batch_size=batch_size, shuffle=True),
+        DataLoader(val_dataset, batch_size=batch_size),
+        DataLoader(test_dataset, batch_size=batch_size)
+    )
+
