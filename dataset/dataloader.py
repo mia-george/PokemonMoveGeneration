@@ -24,17 +24,15 @@ moves_df["accuracy"] = moves_df["accuracy"].fillna("none")
 # print(moves_df.head(20))
 
 # Format input strings for T5
-moves_df["input_text"] = (
+moves_df["input_text"] = moves_df["short_description"]
+
+moves_df["target_text"] = (
     "move: " + moves_df["name"].str.lower() +
-    " type: " + moves_df["type"].str.lower() +
-    " power: " + moves_df["power"].astype(str) +
-    " accuracy: " + moves_df["accuracy"].astype(str) +
-    " pp: " + moves_df["pp"].astype(str) +
-    " priority: " + moves_df["priority"].astype(str) +
-    " class: " + moves_df["damage_class"].str.lower() +
-    " generation: " + moves_df["generation"].astype(str)
+    " | type: " + moves_df["type"].str.lower() +
+    " | power: " + moves_df["power"].astype(str) +
+    " | accuracy: " + moves_df["accuracy"].astype(str) +
+    " | generation: " + moves_df["generation"].astype(str)
 )
-moves_df["target_text"] = moves_df["short_description"]
 
 # Split into train/val/test
 train_df, temp_df = train_test_split(moves_df, test_size=0.2, random_state=42)
@@ -43,7 +41,7 @@ val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=42)
 print(f"Train: {len(train_df)}, Val: {len(val_df)}, Test: {len(test_df)}")
 
 class MovesDataset(Dataset):
-    def __init__(self, df, tokenizer, max_input_length=128, max_target_length=64):
+    def __init__(self, df, tokenizer, max_input_length=128, max_target_length=128):
         self.inputs = df["input_text"].tolist()
         self.targets = df["target_text"].tolist()
         self.tokenizer = tokenizer
