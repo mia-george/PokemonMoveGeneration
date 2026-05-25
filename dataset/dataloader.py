@@ -66,10 +66,12 @@ class MovesDataset(Dataset):
             truncation=True,
             return_tensors="pt"
         )
+        labels = target_enc["input_ids"].squeeze()
+        labels[labels == self.tokenizer.pad_token_id] = -100 
         return {
             "input_ids": input_enc["input_ids"].squeeze(),
             "attention_mask": input_enc["attention_mask"].squeeze(),
-            "labels": target_enc["input_ids"].squeeze()
+            "labels": labels
         }
 
 def get_dataloaders(tokenizer, batch_size=8):
