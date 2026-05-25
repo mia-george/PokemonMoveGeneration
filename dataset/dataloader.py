@@ -74,7 +74,7 @@ class MovesDataset(Dataset):
             "labels": labels
         }
 
-def get_dataloaders(tokenizer, batch_size=8):
+def get_dataloaders(tokenizer, batch_size=32):
     train_dataset = MovesDataset(train_df, tokenizer)
     val_dataset = MovesDataset(val_df, tokenizer)
     test_dataset = MovesDataset(test_df, tokenizer)
