@@ -30,8 +30,7 @@ moves_df["target_text"] = (
     "move: " + moves_df["name"].str.lower() +
     " | type: " + moves_df["type"].str.lower() +
     " | power: " + moves_df["power"].astype(str) +
-    " | accuracy: " + moves_df["accuracy"].astype(str) +
-    " | generation: " + moves_df["generation"].astype(str)
+    " | accuracy: " + moves_df["accuracy"].astype(str)
 )
 
 # Split into train/val/test
@@ -74,7 +73,7 @@ class MovesDataset(Dataset):
             "labels": labels
         }
 
-def get_dataloaders(tokenizer, batch_size=32):
+def get_dataloaders(tokenizer, batch_size=128):
     train_dataset = MovesDataset(train_df, tokenizer)
     val_dataset = MovesDataset(val_df, tokenizer)
     test_dataset = MovesDataset(test_df, tokenizer)

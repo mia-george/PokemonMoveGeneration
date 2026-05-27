@@ -11,8 +11,8 @@ model = model.to(device)
 train_loader, val_loader, test_loader = get_dataloaders(tokenizer)
 
 # Hyperparameters
-epochs = 30
-lr = 5e-5
+epochs = 500
+lr = 3e-5
 optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 total_steps = len(train_loader) * epochs
 

@@ -68,5 +68,4 @@ for i in range(5):
     print(f"Type:      {parsed.get('type', 'N/A')}")
     print(f"Power:     {parsed.get('power', 'N/A')}")
     print(f"Accuracy:  {parsed.get('accuracy', 'N/A')}")
-    print(f"Generation:{parsed.get('generation', 'N/A')}")
     print("-" * 40)
