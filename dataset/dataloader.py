@@ -21,6 +21,11 @@ moves_df['short_description'] = moves_df['short_description'].str.replace('$effe
 moves_df["power"] = moves_df["power"].fillna("none")
 moves_df["accuracy"] = moves_df["accuracy"].fillna("none")
 
+# remove duplicate descriptions so each description maps to exactly one move
+desc_counts = moves_df.groupby("short_description")["name"].count()
+unique_descs = desc_counts[desc_counts == 1].index
+moves_df = moves_df[moves_df["short_description"].isin(unique_descs)]
+
 # print(moves_df.head(20))
 
 # Format input strings for T5
@@ -40,7 +45,7 @@ val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=42)
 print(f"Train: {len(train_df)}, Val: {len(val_df)}, Test: {len(test_df)}")
 
 class MovesDataset(Dataset):
-    def __init__(self, df, tokenizer, max_input_length=128, max_target_length=128):
+    def __init__(self, df, tokenizer, max_input_length=128, max_target_length=32):
         self.inputs = df["input_text"].tolist()
         self.targets = df["target_text"].tolist()
         self.tokenizer = tokenizer
