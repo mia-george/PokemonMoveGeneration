@@ -1,5 +1,4 @@
 import pandas as pd
-import roman
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 
@@ -10,9 +9,6 @@ augmented_df = pd.read_csv("data/augmented_moves.csv", encoding="utf-8")
 
 # fix column name 
 moves_df = moves_df.rename(columns={'short_descripton': 'short_description'})
-
-# clean short description column to remove $effect_chance%
-moves_df['short_description'] = moves_df['short_description'].str.replace('$effect_chance% ', '', regex=False)
 
 # only need these columns
 moves_df = moves_df[["name", "short_description", "type", "power", "accuracy"]]
@@ -25,22 +21,25 @@ combined_df["power"] = combined_df["power"].fillna("none")
 combined_df["accuracy"] = combined_df["accuracy"].fillna("none")
 
 # print(moves_df.head(20))
+# print(f"Original unique rows: {len(moves_df)}")
+# print(f"Augmented rows: {len(augmented_df)}")
+# print(f"Combined: {len(combined_df)}")
 
 # Format input strings for T5
-moves_df["input_text"] = moves_df["short_description"]
+combined_df["input_text"] = "predict move: " + combined_df["short_description"]
 
-moves_df["target_text"] = (
-    "move: " + moves_df["name"].str.lower() +
-    " | type: " + moves_df["type"].str.lower() +
-    " | power: " + moves_df["power"].astype(str) +
-    " | accuracy: " + moves_df["accuracy"].astype(str)
+combined_df["target_text"] = (
+    "move: " + combined_df["name"].str.lower() +
+    " | type: " + combined_df["type"].str.lower() +
+    " | power: " + combined_df["power"].astype(str) +
+    " | accuracy: " + combined_df["accuracy"].astype(str)
 )
 
 # Split into train/val/test
-train_df, temp_df = train_test_split(moves_df, test_size=0.2, random_state=42)
+train_df, temp_df = train_test_split(combined_df, test_size=0.2, random_state=42)
 val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=42)
 
-print(f"Train: {len(train_df)}, Val: {len(val_df)}, Test: {len(test_df)}")
+# print(f"Train: {len(train_df)}, Val: {len(val_df)}, Test: {len(test_df)}")
 
 class MovesDataset(Dataset):
     def __init__(self, df, tokenizer, max_input_length=128, max_target_length=32):
