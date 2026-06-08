@@ -16,13 +16,6 @@ lr = 3e-5
 optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 total_steps = len(train_loader) * epochs
 
-# Scheduler for learning rate decay
-scheduler = get_linear_schedule_with_warmup(
-    optimizer, 
-    num_warmup_steps=total_steps // 10,
-    num_training_steps=total_steps
-)
-
 # Early stopping parameters
 best_val_loss = float('inf')
 patience, patience_counter = 5, 0
@@ -43,7 +36,6 @@ for epoch in range(epochs):
         loss = outputs.loss
         loss.backward()
         optimizer.step()
-        scheduler.step()
 
         total_loss += loss.item()
 
