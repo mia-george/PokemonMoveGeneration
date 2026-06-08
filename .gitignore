@@ -2,7 +2,7 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+,findCan you desc
 # C extensions
 *.so
 
@@ -35,6 +35,8 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+
+.gradio
 
 # Unit test / coverage reports
 htmlcov/
