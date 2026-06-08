@@ -4,8 +4,8 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer, get_linear_sch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-tokenizer = T5Tokenizer.from_pretrained("t5-small")
-model = T5ForConditionalGeneration.from_pretrained("t5-small")
+tokenizer = T5Tokenizer.from_pretrained("t5-base")
+model = T5ForConditionalGeneration.from_pretrained("t5-base")
 model = model.to(device)
 
 train_loader, val_loader, test_loader = get_dataloaders(tokenizer)
