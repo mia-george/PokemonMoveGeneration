@@ -1,5 +1,4 @@
 pandas
-roman
 scikit-learn
 transformers
 torch
